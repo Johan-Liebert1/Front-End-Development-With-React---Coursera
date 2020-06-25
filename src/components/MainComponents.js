@@ -29,7 +29,10 @@ class Main extends Component {
 
     }
 
+
     render() {
+
+
         const HomePage = () => {
             return (
                 // removing the code that used states, as now they are passed as props due to 
