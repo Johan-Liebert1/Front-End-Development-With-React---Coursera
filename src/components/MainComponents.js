@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import  {connect} from 'react-redux'
 
+// IMPORTING THE COMPONENTS
 import Header from "./HeaderComponent"
 import Footer from "./FooterComponent"
 import Home from './HomeComponent'
@@ -11,7 +12,8 @@ import DishDetail from './DishDetails'
 import Contact from "./ContactComponent"
 import About from "./AboutComponent"
 
-import {addComment} from "../redux/actionCreators"
+
+import {addComment, fetchDishes} from "../redux/actionCreators"
 
 // mapping states to props
 const mapStateToProps = state => {
@@ -25,7 +27,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+
+    //fetchDishes is a thunk
+    fetchDishes: () => {dispatch(fetchDishes())}
 })
 
 class Main extends Component {
@@ -33,6 +38,12 @@ class Main extends Component {
     constructor(props) {
         super(props);
 
+    }
+
+    // LIFECYCLE METHOD THAT WILL BE CALLED JUST AFTER THE COMPONENT IS MOUNTED INTO THE VIEW
+
+    componentDidMount() {
+        this.props.fetchDishes()
     }
 
 
@@ -48,7 +59,11 @@ class Main extends Component {
                 //       promotion={this.state.promotions.filter((promotion) => promotion.featured)[0]}
                 //       leader={this.state.leaders.filter((leader) => leader.featured)[0]}
 
-                <Home dish={this.props.dishes.filter((dish) => dish.featured)[0]}
+                // props.dishes.dishes becuse we changed the structure of the dishes state
+
+                <Home dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
+                      dishesLoading={this.props.dishes.isLoading}
+                      dishesErrMess={this.props.dishes.errMess}
                       promotion={this.props.promotions.filter((promotion) => promotion.featured)[0]}
                       leader={this.props.leaders.filter((leader) => leader.featured)[0]}
                 />
@@ -56,12 +71,18 @@ class Main extends Component {
             )
         }
 
+        // THIS IS BEING PASSED TO THE MENU COMPONENT
+
         const DishWithId = ({match}) => { 
             // match prop is passed in by the route along with location and hitory, but we only want match
             return (
                 <DishDetail 
-                    dish={this.props.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10))[0]}
+                    dish={this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10))[0]}
+
                     comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId, 10))}
+                    
+                    isLoading={this.props.dishes.isLoading}
+                    ErrMess={this.props.dishes.errMess}
                     addComment={this.props.addComment}
                     
                 />

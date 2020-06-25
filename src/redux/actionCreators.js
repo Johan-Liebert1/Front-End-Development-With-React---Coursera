@@ -1,4 +1,5 @@
 import * as ActionTypes from "./actionTypes"
+import { DISHES } from '../Shared/dishes'
 
 export const addComment = (dishId, rating, comment, author) => ({
     
@@ -14,3 +15,28 @@ export const addComment = (dishId, rating, comment, author) => ({
     }
 
 })
+
+// two => means that the function is returning a function
+
+export const fetchDishes = () => (dispatch) => {
+
+    dispatch(dishesLoading(true));
+
+    setTimeout(() => {
+        dispatch(addDishes(DISHES));
+    }, 2000);
+}
+
+export const dishesLoading = () => ({
+    type: ActionTypes.DISHES_LOADING
+});
+
+export const dishesFailed = (errmess) => ({
+    type: ActionTypes.DISHES_FAILED,
+    payload: errmess
+});
+
+export const addDishes = (dishes) => ({
+    type: ActionTypes.ADD_DISHES,
+    payload: dishes
+});
