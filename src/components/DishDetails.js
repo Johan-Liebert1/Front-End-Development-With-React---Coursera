@@ -8,7 +8,7 @@ import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Link } from 'react-router-dom'
 
 
-function RenderComments({comments}) {
+function RenderComments({comments, dishId, addComment}) {
     if (comments == null) {
         return (<div></div>)
     }
@@ -37,7 +37,7 @@ function RenderComments({comments}) {
                 {Comments}
             </ul>
 
-            <CommentForm> 
+            <CommentForm dishId={dishId} addComment={addComment}> 
             </CommentForm>
         </div>
     )
@@ -74,7 +74,8 @@ const DishDetail = (props) => {
 
     const commentItem =  <RenderComments 
                             comments={props.comments}
-                            
+                            addComment = {props.addComment}
+                            dishId = {props.dish.id}
                         />
 
     return (
@@ -132,6 +133,8 @@ class CommentForm extends Component {
 
         console.log('Current State is: ' + JSON.stringify(values));
 
+        this.props.addComment(this.props.dishId, values.rating, values.comment, values.author)
+
     }
 
     render() {
@@ -142,7 +145,7 @@ class CommentForm extends Component {
                 <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
                     <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
                     <ModalBody>
-                        <LocalForm> 
+                        <LocalForm onSubmit={(values) => this.handleSubmit(values) }> 
                             <Row  className="form-group">
                                 <Label for="rating" md={12}>Rating</Label>
                                 <Col  md={12}>
