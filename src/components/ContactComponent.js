@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Breadcrumb, BreadcrumbItem, Button, Input, Col, Label, Row, FormGroup} from 'reactstrap'
-import {Control, LocalForm, Errors} from 'react-redux-form'
+import {Control, Form, Errors, actions} from 'react-redux-form'
 import {Link} from 'react-router-dom'
 
 // THE FORM MADE IN THIS COMPONENT IS A CONTROLLED FORM
@@ -59,6 +59,7 @@ class Contact extends Component {
         console.log('Current State is: ' + JSON.stringify(values));
         alert('Current State is: ' + JSON.stringify(values));
         // event.preventDefault();
+        this.props.resetFeedbackForm()
     }
 
     // handleBlur = (field) => (evt) => {
@@ -144,7 +145,7 @@ class Contact extends Component {
                     </div>
 
                     <div className="col-12 col-md-9">
-                        <LocalForm onSubmit={(values) => this.handleSubmit(values) }>
+                        <Form model="feedback" onSubmit={(values) => this.handleSubmit(values) }>
 
                             <Row className="form-group">
                                 {/* htmlFor in order to not confuse with JS's for keyword */}
@@ -287,7 +288,7 @@ class Contact extends Component {
                                 </Col>
                             </Row>
 
-                        </LocalForm>
+                        </Form>
                     </div>
                 </div>
             </div>
