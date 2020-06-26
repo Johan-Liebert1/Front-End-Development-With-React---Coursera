@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom'
 
 import {Loading} from './LoadingComponent'
 
+import {baseUrl} from "../Shared/baseURL"
+
+
 function RenderComments({comments, dishId, addComment}) {
     if (comments == null) {
         return (<div></div>)
@@ -69,7 +72,7 @@ function RenderDish(props) {
         return (
             <div className='col-12 col-md-5 m-1'>
                 <Card>
-                    <CardImg width="100%" src={props.dish.image} alt={props.dish.name} />
+                    <CardImg width="100%" src={baseUrl + props.dish.image} alt={props.dish.name} />
                     <CardBody>
                         <CardTitle>{props.dish.name}</CardTitle>
                         <CardText>{props.dish.description}</CardText>
